@@ -1,0 +1,32 @@
+window.SevenThemeKit=(()=>{
+const appearances={
+    saturn:{name:'土星环',description:'砂金环带 · 奶油色',kind:'bands',radius:.55,tilt:-.40,orbitY:1.30,depth:2.05,orbitX:1.84,cardRoll:-.20,brand:'#806143',accent:'#dcb889',planet:['#f5e3c6','#d4b288','#b68d63'],planetDark:['#e3c8a4','#bd966c','#8b6649'],rings:['#c7a67d','#ebd9bc','#9f7d59'],roughness:.48},
+    star:{name:'星轨',description:'交错弧线 · 珍珠紫',kind:'arcs',radius:.53,tilt:-.22,orbitY:1.34,depth:2.08,orbitX:1.85,cardRoll:-.12,brand:'#6557ad',accent:'#e5bba5',planet:['#f0eafa','#b4a8d9','#8176a9'],planetDark:['#d9d0f0','#a293cb','#7662a4'],rings:['#b8a7df','#e5bea7','#8e81ba'],roughness:.32},
+    aurora:{name:'极光',description:'渐变光带 · 冰川绿',kind:'ribbons',radius:.53,tilt:-.46,orbitY:1.27,depth:2.10,orbitX:1.80,cardRoll:-.25,brand:'#347c70',accent:'#a8cfcd',planet:['#e5f8ed','#a6d4c7','#7eabbd'],planetDark:['#c2e8dc','#8bbeb9','#718db7'],rings:['#8fcfbc','#b0c6e3','#b8a1d5'],roughness:.27}
+  };
+
+  const TAU=Math.PI*2;
+  const radius=2.65;
+  const tilts={saturn:-.27,star:-.18,aurora:-.33};
+  const inclinations={saturn:.54,star:.56,aurora:.52};
+  function axes(THREE,id){const t=tilts[id],h=inclinations[id];return {u:new THREE.Vector3(Math.cos(t),Math.sin(t),0),v:new THREE.Vector3(h*Math.sin(t),-h*Math.cos(t),Math.sqrt(1-h*h))};}
+  function frame(THREE,id){const a=axes(THREE,id);return new THREE.Matrix4().makeBasis(a.u,a.v,new THREE.Vector3().crossVectors(a.u,a.v).normalize());}
+  function point(THREE,id,theta){const a=axes(THREE,id);return a.u.multiplyScalar(Math.sin(theta)*radius).add(a.v.multiplyScalar(Math.cos(theta)*radius));}
+  function texture(THREE,a,dark){const c=document.createElement('canvas');c.width=1024;c.height=512;const ctx=c.getContext('2d'),p=dark?a.planetDark:a.planet,g=ctx.createLinearGradient(0,0,a.kind==='ribbons'?700:0,512);g.addColorStop(0,p[0]);g.addColorStop(.54,p[1]);g.addColorStop(1,p[2]);ctx.fillStyle=g;ctx.fillRect(0,0,1024,512);
+    if(a.kind==='bands'){for(let i=0;i<30;i++){ctx.globalAlpha=.08+(Math.sin(i*.8)+1)*.025;ctx.fillStyle=i%3?p[0]:p[2];ctx.fillRect(0,30+i*16,1024,3+Math.sin(i*1.7));}ctx.globalAlpha=.1;ctx.fillStyle=p[0];ctx.fillRect(0,235,1024,20);ctx.globalAlpha=1;}
+    if(a.kind==='ribbons'){const glow=ctx.createLinearGradient(0,0,1024,420);glow.addColorStop(0,'#b4dace');glow.addColorStop(1,'#b9b0d7');ctx.globalAlpha=.25;ctx.fillStyle=glow;ctx.beginPath();ctx.moveTo(0,100);ctx.bezierCurveTo(300,340,710,-60,1024,160);ctx.lineTo(1024,280);ctx.bezierCurveTo(700,70,300,450,0,230);ctx.fill();ctx.globalAlpha=1;}
+    const map=new THREE.CanvasTexture(c);map.colorSpace=THREE.SRGBColorSpace;return map;
+  }
+  function create(THREE,id,dark){const a=appearances[id],group=new THREE.Group(),basis=frame(THREE,id);
+    const material=new THREE.MeshPhysicalMaterial({map:texture(THREE,a,dark),color:0xffffff,roughness:a.kind==='bands'?.70:.46,metalness:0,clearcoat:a.kind==='bands'?.06:.18,clearcoatRoughness:.55});
+    function band(inner,outer,color,opacity){const m=new THREE.Mesh(new THREE.RingGeometry(inner,outer,128),new THREE.MeshBasicMaterial({color,side:THREE.DoubleSide,transparent:true,opacity,depthWrite:false,depthTest:true,toneMapped:false}));m.applyMatrix4(basis);group.add(m);}
+    function arc(r,start,end,color,turn){const pts=[];for(let i=0;i<=96;i++){const t=start+(end-start)*i/96;pts.push(new THREE.Vector3(Math.cos(t)*r,Math.sin(t)*r,0));}const wrap=new THREE.Group();wrap.applyMatrix4(basis);const mesh=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),96,.008,5,false),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.82,toneMapped:false,depthWrite:false}));mesh.rotation.x=turn;wrap.add(mesh);group.add(wrap);return wrap;}
+    if(a.kind==='bands'){band(.71,.77,a.rings[0],.68);band(.81,1.09,a.rings[1],.82);band(1.12,1.22,a.rings[0],.68);band(1.26,1.34,a.rings[2],.42);band(1.365,1.38,a.rings[1],.68);}
+    if(a.kind==='arcs'){const radii=[.92,1.14,1.32],turns=[.04,.58,-.42],theta=[.8,3.5,5.2];for(let i=0;i<3;i++){const wrap=arc(radii[i],[-.2,.35,-.6][i],[5.8,5.7,4.6][i],a.rings[i],turns[i]);const dot=new THREE.Mesh(new THREE.SphereGeometry(i===1?.038:.027,12,8),new THREE.MeshBasicMaterial({color:a.rings[i],toneMapped:false}));dot.position.set(Math.cos(theta[i])*radii[i],Math.sin(theta[i])*radii[i],0).applyAxisAngle(new THREE.Vector3(1,0,0),turns[i]);wrap.add(dot);}}
+    if(a.kind==='ribbons'){for(let b=0;b<3;b++){const pos=[],colors=[],indices=[],n=128,c1=new THREE.Color(a.rings[b]),c2=new THREE.Color(a.rings[(b+1)%3]);for(let i=0;i<=n;i++){const t=i/n*TAU,r=.92+b*.17+.035*Math.sin(t*3+b),w=.026+.013*Math.sin(t*2+b);for(let e=0;e<2;e++){const rr=r+(e?w:-w);pos.push(Math.cos(t)*rr,Math.sin(t)*rr,.085*Math.sin(t*2+b));const c=c1.clone().lerp(c2,(Math.sin(t+b)+1)/2);colors.push(c.r,c.g,c.b);}if(i<n){const k=i*2;indices.push(k,k+1,k+2,k+1,k+3,k+2);}}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));g.setIndex(indices);const m=new THREE.Mesh(g,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.DoubleSide,transparent:true,opacity:.68,depthWrite:false,toneMapped:false}));m.applyMatrix4(basis);group.add(m);}}
+    return {group,material,radius:a.radius};
+  }
+  function dispose(root){if(!root)return;const geometries=new Set(),materials=new Set(),textures=new Set();root.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material)for(const m of Array.isArray(o.material)?o.material:[o.material]){materials.add(m);if(m.map)textures.add(m.map);}});textures.forEach(x=>x.dispose());materials.forEach(x=>x.dispose());geometries.forEach(x=>x.dispose());}
+  function thumbnail(c,id,dark){const a=appearances[id],p=dark?a.planetDark:a.planet,ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);ctx.save();ctx.translate(100,64);ctx.rotate(-.30);function rings(front){for(let i=0;i<3;i++){ctx.strokeStyle=a.rings[i];ctx.lineWidth=a.kind==='bands'?[6,3,1.4][i]:a.kind==='arcs'?1.7:3.3;ctx.beginPath();ctx.ellipse(0,0,58+i*8,18+i*3,a.kind==='arcs'?(i-1)*.6:(i-1)*.08,front?0:Math.PI,front?Math.PI:TAU);ctx.stroke();}}rings(false);const g=ctx.createRadialGradient(-9,-11,1,0,0,25);g.addColorStop(0,p[0]);g.addColorStop(.65,p[1]);g.addColorStop(1,p[2]);ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,25,0,TAU);ctx.fill();rings(true);ctx.restore();}
+  return {appearances,radius,axes,point,create,dispose,thumbnail};
+})();

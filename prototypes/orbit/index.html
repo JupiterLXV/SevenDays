@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="color-scheme" content="light dark"><title>SevenDays</title><style>body{margin:0;background:light-dark(#efedf1,#111114)}#sevendays-refined-preview{min-height:100dvh;display:grid;align-items:center}</style><link rel="stylesheet" href="styles.css"></head><body>
+<div id="sevendays-refined-preview" class="viz-dotted-background" data-appearance="saturn">
+  <section class="so-phone" aria-label="SevenDays星环首页预览，示例数据">
+    <header class="so-header">
+      <canvas class="so-brand" width="108" height="108" aria-hidden="true"></canvas>
+      <h2>SevenDays</h2>
+      <button class="so-icon so-settings" type="button" aria-label="设备与权限">设置</button>
+    </header>
+    <div class="so-summary"><div><span class="so-summary-label">今日用时</span><strong>2<span>小时</span>28<span>分</span></strong></div><span class="so-connected"><i aria-hidden="true"></i>已连接</span></div>
+    <div class="so-orbit-toolbar">
+      <button class="so-theme" type="button" aria-label="选择外观主题，当前土星环"><span class="so-theme-dot" aria-hidden="true"></span><span class="so-theme-name">土星环</span><span aria-hidden="true">⌄</span></button>
+      <span class="so-motion-label">已停稳</span>
+      <button class="so-icon so-brake" type="button" aria-label="转动卡片">▷</button>
+    </div>
+    <div class="so-stage" aria-label="应用轨道，滑动切换，轻点停止">
+      <div class="so-stage-shadow" aria-hidden="true"></div>
+      <div class="so-fallback-core" aria-hidden="true"><span class="so-fallback-band"></span><span class="so-fallback-sphere"></span></div>
+      <div class="so-fallback-cards" hidden></div>
+      <canvas class="so-webgl" aria-hidden="true"></canvas>
+    </div>
+    <div class="so-controls">
+      <button class="so-icon so-prev" type="button" aria-label="上一个应用">‹</button>
+      <button class="so-index" type="button" aria-label="选择应用"><span>全部应用</span><span class="so-count">1 / 7</span><span aria-hidden="true">⌄</span></button>
+      <button class="so-icon so-next" type="button" aria-label="下一个应用">›</button>
+    </div>
+    <button class="so-selected" type="button" aria-label="查看当前应用规则">
+      <span class="so-selected-heading"><canvas class="so-app-icon so-current-icon" width="96" height="96" aria-hidden="true"></canvas><span class="so-selection-words"><strong class="so-selection-name">哔哩哔哩</strong><span class="so-selection-quota">每天 90 分钟</span></span><span class="so-card-chevron" aria-hidden="true">›</span></span>
+      <span class="so-time-line"><span class="so-remaining-label">剩余时间</span><span class="so-selection-time">18:01</span></span>
+      <span class="so-remaining-track" aria-hidden="true"><span class="so-remaining-fill"></span></span>
+      <span class="so-card-foot"><span class="so-used-label">已用 71 分钟</span><span>11月6日可调整</span></span>
+    </button>
+    <footer class="so-footer"><button class="so-add" type="button">＋ 添加应用</button></footer>
+    <div class="so-modal" hidden><button class="so-scrim" type="button" aria-label="关闭面板"></button><section class="so-sheet" role="dialog" aria-modal="true" aria-labelledby="so-sheet-title"><div class="so-sheet-chrome"><div class="so-grip" aria-hidden="true"><span class="so-handle"></span></div><header><h3 id="so-sheet-title"></h3><button class="so-icon so-close" type="button" aria-label="关闭面板">×</button></header></div><div class="so-sheet-content"></div></section></div>
+    <div class="so-toast" role="status" hidden></div>
+    <span class="so-sr" aria-live="polite" aria-atomic="true"></span>
+  </section>
+</div>
+<script src="three.min.js"></script>
+<script src="app-assets.js"></script>
+<script src="planet-themes.js"></script>
+<script src="orbit-renderer.js"></script>
+<script src="sheet-motion.js"></script>
+<script src="scene.js"></script>
+
+</body></html>
