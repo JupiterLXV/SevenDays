@@ -3,7 +3,20 @@
 <div id="sevendays-refined-preview" class="viz-dotted-background" data-appearance="saturn">
   <section class="so-phone" aria-label="SevenDays星环首页预览，示例数据">
     <header class="so-header">
-      <canvas class="so-brand" width="108" height="108" aria-hidden="true"></canvas>
+      <svg class="so-brand" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" aria-hidden="true" focusable="false">
+        <defs>
+          <clipPath id="sd-glass-clip"><path d="M34,16.2 H74 C81.3,16.2 84.8,20.5 84.8,26.5 C84.8,37.7 77.2,45.5 67.9,51.9 C64.9,54 63.4,55.6 63.4,57.5 C63.4,60.7 66.8,63.1 70.9,66.3 C78.8,72.4 84.3,79.6 84.3,85.8 C84.3,90.5 80.9,93.3 75.2,93.3 H32.8 C27.1,93.3 23.7,90.5 23.7,85.8 C23.7,79.6 29.2,72.4 37.1,66.3 C41.2,63.1 44.6,60.7 44.6,57.5 C44.6,55.6 43.1,54 40.1,51.9 C30.8,45.5 23.2,37.7 23.2,26.5 C23.2,20.5 26.7,16.2 34,16.2 Z"/></clipPath>
+          <linearGradient id="sd-glass" gradientUnits="userSpaceOnUse" x1="54" y1="16" x2="54" y2="94"><stop offset="0" stop-color="#D0FEF4"/><stop offset="0.12" stop-color="#B1F4E3"/><stop offset="0.26" stop-color="#C5FDEF"/><stop offset="0.57" stop-color="#BDF9E8"/><stop offset="0.82" stop-color="#AFF4E0"/><stop offset="1" stop-color="#B9FBE9"/></linearGradient>
+          <radialGradient id="sd-lower-shade" gradientUnits="userSpaceOnUse" cx="54" cy="73" r="25"><stop offset="0" stop-color="#5FC8AF"/><stop offset="0.48" stop-color="#81DCC4" stop-opacity="0.74"/><stop offset="1" stop-color="#81DCC4" stop-opacity="0"/></radialGradient>
+          <radialGradient id="sd-upper-shade" gradientUnits="userSpaceOnUse" cx="55" cy="43" r="25"><stop offset="0" stop-color="#218D78"/><stop offset="0.38" stop-color="#4DB49E" stop-opacity="0.94"/><stop offset="0.7" stop-color="#74D3B9" stop-opacity="0.59"/><stop offset="1" stop-color="#74D3B9" stop-opacity="0"/></radialGradient>
+          <linearGradient id="sd-sand" gradientUnits="userSpaceOnUse" x1="54" y1="74.4" x2="54" y2="93.3"><stop offset="0" stop-color="#D1FEF4"/><stop offset="0.46" stop-color="#A6F2DE"/><stop offset="0.7" stop-color="#9CECD7"/><stop offset="1" stop-color="#B8FCEB"/></linearGradient>
+          <linearGradient id="sd-seven" gradientUnits="userSpaceOnUse" x1="54" y1="36.7" x2="54" y2="78"><stop offset="0" stop-color="#896ADB"/><stop offset="0.5" stop-color="#A289ED"/><stop offset="1" stop-color="#8161D7"/></linearGradient>
+        </defs>
+        <rect width="108" height="108" rx="27" fill="#014742"/>
+        <path fill="url(#sd-glass)" d="M34,16.2 H74 C81.3,16.2 84.8,20.5 84.8,26.5 C84.8,37.7 77.2,45.5 67.9,51.9 C64.9,54 63.4,55.6 63.4,57.5 C63.4,60.7 66.8,63.1 70.9,66.3 C78.8,72.4 84.3,79.6 84.3,85.8 C84.3,90.5 80.9,93.3 75.2,93.3 H32.8 C27.1,93.3 23.7,90.5 23.7,85.8 C23.7,79.6 29.2,72.4 37.1,66.3 C41.2,63.1 44.6,60.7 44.6,57.5 C44.6,55.6 43.1,54 40.1,51.9 C30.8,45.5 23.2,37.7 23.2,26.5 C23.2,20.5 26.7,16.2 34,16.2 Z"/>
+        <g clip-path="url(#sd-glass-clip)"><path fill="url(#sd-lower-shade)" d="M18,42 H90 V95 H18 Z"/><path fill="url(#sd-upper-shade)" d="M30,43 H79 V68 H30 Z"/><path fill="url(#sd-sand)" d="M20,86 C33,82.9 42.7,74.4 55.2,74.4 C67.9,74.4 77.3,82.3 88,86 V95 H20 Z"/></g>
+        <path fill="url(#sd-seven)" d="M31,36.7 H72.4 C77,36.7 77.8,38.5 75.2,42 C68.1,51.1 54.9,61.1 41,78 H33.9 C42.2,64.1 53.9,54.1 63.8,44.4 C64.7,43.5 64.2,43 63,43 H31 Z"/>
+      </svg>
       <h2>SevenDays</h2>
       <button class="so-icon so-settings" type="button" aria-label="设备与权限">设置</button>
     </header>

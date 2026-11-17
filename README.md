@@ -1,26 +1,34 @@
 # SevenDays
 
-SevenDays 是一款 Android 应用限时工具。可以为每个应用设置每日额度；规则保存后锁定七天，额度耗尽时显示拦截提示。
+SevenDays 是一款离线的 Android 应用限时工具。为各个应用设置每日使用额度，额度用完后会显示拦截提示。每次保存规则后，七天内不能修改或删除该规则。
 
-源码从 **0.6.5** 开始。原签名安装包在 [Releases](../../releases) 中；直接覆盖安装可以保留原规则和使用记录。
+**当前版本：0.6.7** · [下载 APK](../../releases) · [使用说明](使用说明.md)
 
-- 星环首页浏览受限应用，支持土星环、星轨和极光主题。
-- 无障碍服务负责计时和拦截；持续保护通知可单独开启。
-- 退出界面后释放星环资源，空闲时减少写盘。
-- 诊断显示真实安装版本、权限状态、连接状态和系统进程退出记录。
+## 兼容性
 
-使用方法见 [使用说明](使用说明.md)。后台服务依赖 Android 的授权与绑定；iQOO 还需允许自启动和后台运行。
+- **最低安装要求：Android 8.0（API 26）。** 安装包不限制手机品牌或型号；设备识别用于显示系统信息和提供对应的设置引导。
+- 计时和拦截依赖系统无障碍服务。安装后在「设备与权限」开启 SevenDays 的无障碍主开关，回到首页确认显示「保护中」。如果系统提示「受限设置」，可根据 [Android 系统说明](https://support.google.com/android/answer/12623953?hl=zh-Hans) 查看该应用的应用信息。
+- 后台运行、自启动和电池优化的设置随手机系统而异。系统结束进程或关闭无障碍后，保护可能中断。持续保护通知可选，不能保证抵抗系统一键清理或强停。
+- 星环无法渲染时会回退到可用的显示方式，首页也可主动切到原生列表。该版本未逐一验证各机型的后台保活或返回桌面流畅度，见 [验证记录](docs/VALIDATION-0.6.7.md)。
+
+## 安装与更新
+
+在 [Releases](../../releases) 中下载对应版本的 .apk。已有旧版时，直接用同签名安装包覆盖更新；保留原应用数据可保留已有规则、当天用量和七天锁定截止时间。
+
+0.6.7 增加以下体验：
+
+- 首页可直接切换「星环／列表」并记住选择。星环卡片用沙漏显示剩余额度比例，同时保留准确的时间数字。
+- 保存前可预览今天的剩余额度和是否会立即到限，分别显示每日额度恢复时间与规则可修改时间。
+- 首页区分无障碍未开启、已授权待连接和实际保护异常；「运行诊断」分别记录移除遮挡、系统返回请求和桌面窗口确认的耗时。
 
 ## 本地构建
 
-使用 Python 3、JDK 17 或更新版本、Android SDK 35 和 Build Tools 35.0.0。设置 `ANDROID_SDK_ROOT` 后运行：
+使用 Python 3、JDK 17 或更新版本、Android SDK 35 和 Build Tools 35.0.0。设置 ANDROID_SDK_ROOT 后运行：
 
-```sh
-python3 build-apk.py
-```
+    python3 build-apk.py
 
-默认使用本机生成的调试签名，输出 `SevenDays-0.6.5-debug.apk`。调试包不能覆盖已安装的发布包。
+默认以本机调试密钥生成 SevenDays-0.6.7-debug.apk。调试包不能覆盖使用不同签名的已有安装包。Windows 可运行 build-windows.bat。
 
-使用自己的已有签名构建时，在本机环境中设置 `SEVENDAYS_KEYSTORE` 和 `SEVENDAYS_KEYSTORE_PASSWORD`，并按需设置 `SEVENDAYS_KEY_ALIAS`、`SEVENDAYS_KEY_PASSWORD`。签名文件和凭据不进入仓库。Windows 也可运行 `build-windows.bat`。
+使用自己的已有签名构建时，在本机设置 SEVENDAYS_KEYSTORE 和 SEVENDAYS_KEYSTORE_PASSWORD；按需设置 SEVENDAYS_KEY_ALIAS 和 SEVENDAYS_KEY_PASSWORD。不要提交签名文件或凭据。
 
-原生代码在 `app/`；`native-home/` 生成离线首页；独立演示源码在 `prototypes/orbit/`。`tests/` 包含规则模型与 Android 检查，Android 检查仅用于可丢弃的测试设备。Three.js 及演示素材的第三方许可随相应文件保存。
+原生代码在 app/；native-home/ 生成离线首页；prototypes/orbit/ 是使用示例数据的独立演示。Android 检查仅在可丢弃的测试设备上运行。Three.js 和演示素材的许可随对应文件保存。

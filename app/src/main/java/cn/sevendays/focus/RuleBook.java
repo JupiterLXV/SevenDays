@@ -34,7 +34,8 @@ public final class RuleBook {
         rules.remove(pkg); // Keep today's usage: delete/re-add must not refill quota.
     }
     public long used(String pkg) { return usage.getOrDefault(pkg,0L); }
-    public long remaining(String pkg) { Rule r=rules.get(pkg); return r==null?Long.MAX_VALUE:Math.max(0,r.minutes*60000L-used(pkg)); }
+    public long remaining(String pkg) { Rule r=rules.get(pkg); return r==null?Long.MAX_VALUE:remainingWithQuota(pkg,r.minutes); }
+    long remainingWithQuota(String pkg,int minutes) { return Math.max(0,minutes*60000L-used(pkg)); }
     public boolean blocked(String pkg) { return rules.containsKey(pkg)&&remaining(pkg)==0; }
     public void charge(Set<String> packages,long from,long until) {
         if(until<=from)return;

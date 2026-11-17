@@ -19,6 +19,22 @@ public class HomeTransitionTests {
   h.begin("blocked",5000);h.clear();check(!h.waiting(5001,"blocked"),"desktop event or rejected request clears the transition");
   check(h.begin("blocked",6000),"new transition starts after explicit completion");
   h.clear();check(h.source().isEmpty(),"disconnect clears all transition identity");
+  HomeExitTrace trace=new HomeExitTrace(1000,2000);
+  trace.overlayRemoved(1007,true);
+  trace.requestFinished(1012,21,true);
+  check(trace.result==HomeExitTrace.Result.WAITING&&trace.desktopMillis<0,"accepted system request is not proof of a visible launcher");
+  trace.finish(HomeExitTrace.Result.HOME,1230);
+  trace.finish(HomeExitTrace.Result.TIMEOUT,2600);
+  check(trace.result==HomeExitTrace.Result.HOME&&trace.desktopMillis==230&&trace.overlayMillis==7&&trace.requestDelayMillis==12&&trace.requestMillis==21,"reported stages measure different parts of a completed exit");
+  HomeExitTrace rejected=new HomeExitTrace(4000,6000);
+  rejected.requestFinished(4010,4,false);
+  rejected.finish(HomeExitTrace.Result.HOME,4100);
+  check(rejected.result==HomeExitTrace.Result.REJECTED&&rejected.desktopMillis<0,"a later launcher observation cannot rewrite a failed request");
+  HomeExitTrace late=new HomeExitTrace(5000,9000);
+  late.finish(HomeExitTrace.Result.HOME,4999);
+  late.finish(HomeExitTrace.Result.TIMEOUT,6600);
+  late.requestFinished(5010,2000,true);
+  check(late.result==HomeExitTrace.Result.TIMEOUT&&late.desktopMillis<0,"stale and slow observations do not turn a timeout into success");
   System.out.println("PASS "+count+" transition checks");
  }
 }

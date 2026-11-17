@@ -131,7 +131,7 @@ public final class OrbitHome extends FrameLayout {
                         if (themeRequested) { themeRequested=false; themePicker(); }
                         break;
                     case "modal": modal="open".equals(value); break;
-                    case "settings": case "add": case "detail": case "theme": case "select": case "sort":
+                    case "settings": case "protection": case "layout": case "add": case "detail": case "theme": case "select":
                         if (ready&&!paused) listener.command(action,value);
                         break;
                     case "fallback": fail(); break;

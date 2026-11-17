@@ -1,6 +1,10 @@
 package cn.sevendays.focus;
 
 import static cn.sevendays.focus.ProtectionRunState.Authorization.*;
+import static cn.sevendays.focus.ProtectionRunState.Presentation.CONNECTING;
+import static cn.sevendays.focus.ProtectionRunState.Presentation.OFF;
+import static cn.sevendays.focus.ProtectionRunState.Presentation.ISSUE;
+import static cn.sevendays.focus.ProtectionRunState.Presentation.RUNNING;
 
 public final class BackgroundStabilityTests {
     private static int passed;
@@ -24,6 +28,11 @@ public final class BackgroundStabilityTests {
         check(service.keepRunning(true,DISABLED,1_000_000),"later temporary disconnection gets a fresh grace interval");
         check(!service.keepRunning(false,ENABLED,1_000_001),"opting out stops even when accessibility stays authorized");
         check(!service.keepRunning(false,UNKNOWN,1_000_002),"unknown permission cannot override opt-out");
+        check(ProtectionRunState.presentation(ENABLED,false,false)==CONNECTING,"enabled authorization alone is not protection");
+        check(ProtectionRunState.presentation(UNKNOWN,false,false)==ProtectionRunState.Presentation.UNKNOWN,"read failure remains distinct from switching permission off");
+        check(ProtectionRunState.presentation(DISABLED,true,false)==OFF,"an explicitly disabled switch is not masked by a recent heartbeat");
+        check(ProtectionRunState.presentation(ENABLED,true,true)==ISSUE,"a diagnostic fault stays visible despite a connected service");
+        check(ProtectionRunState.presentation(ENABLED,true,false)==RUNNING,"confirmed protection displays the healthy state");
 
         SnapshotCadence snapshots=new SnapshotCadence();
         check(snapshots.due(0,80,false,false,false),"initial clock snapshot is written");

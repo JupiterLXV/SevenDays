@@ -15,6 +15,7 @@ import java.util.concurrent.*;
 public final class GuardService extends AccessibilityService {
     private static GuardService live;private static long heartbeat;private static String fault="";
     static boolean alive(){return live!=null&&fault.isEmpty()&&heartbeat>0&&SystemClock.elapsedRealtime()-heartbeat<5000;}
+    static boolean hasFault(){return !fault.isEmpty();}
     static String status(Context c){return alive()?"已连接 · 计时与拦截正常":status(Diagnostics.authorization(c));}
     static String status(ProtectionRunState.Authorization authorization){
         if(alive())return "已连接 · 计时与拦截正常";
@@ -32,7 +33,7 @@ public final class GuardService extends AccessibilityService {
     private long last,policyTick;private volatile boolean connected;private boolean registered;private LinearLayout overlay;private WindowManager wm;
     private String lastPolicyKey="",barrierKey="";
     private final List<Barrier> barriers=new ArrayList<>();
-    private final HomeTransition homeTransition=new HomeTransition();private String focusedPackage="";private boolean changeQueued;private long lastEventTick,lastMaintenance;
+    private final HomeTransition homeTransition=new HomeTransition();private HomeExitTrace homeExit;private String focusedPackage="";private boolean changeQueued;private long lastEventTick,lastMaintenance;
     private static final long WINDOW_FRESH_MS=1500;
     private WindowReadQueue<WindowReader.Snapshot> windowReads;private ExecutorService navigation;
     private volatile long sessionId;private long homeSequence;private boolean homeInFlight;private String homePackage="",windowFault="";
@@ -40,9 +41,10 @@ public final class GuardService extends AccessibilityService {
     private final Runnable pulse=new Runnable(){public void run(){if(!connected)return;safeTick();if(connected)handler.postDelayed(this,1000);}};
     private final Runnable changed=()->{changeQueued=false;lastEventTick=SystemClock.elapsedRealtime();safeTick();};
     private final Runnable homeTimeout=()->safeTick();
-    private final BroadcastReceiver screen=new BroadcastReceiver(){public void onReceive(Context c,Intent i){if(Intent.ACTION_SCREEN_OFF.equals(i.getAction())){homeTransition.clear();invalidateWindows();hideOverlay();}safeTick();}};
+    private final BroadcastReceiver screen=new BroadcastReceiver(){public void onReceive(Context c,Intent i){if(Intent.ACTION_SCREEN_OFF.equals(i.getAction())){finishHomeExit(HomeExitTrace.Result.INTERRUPTED,SystemClock.elapsedRealtime());homeTransition.clear();invalidateWindows();hideOverlay();}safeTick();}};
     private void requestTick(){if(connected&&!changeQueued){changeQueued=true;long now=SystemClock.elapsedRealtime();handler.postDelayed(changed,Math.max(60,150-(now-lastEventTick)));}}
     @Override protected void onServiceConnected(){
+        finishHomeExit(HomeExitTrace.Result.INTERRUPTED,SystemClock.elapsedRealtime());
         super.onServiceConnected();Ui.theme(this);handler.removeCallbacksAndMessages(null);if(windowReads!=null)windowReads.close();if(navigation!=null)navigation.shutdownNow();sessionId++;changeQueued=false;homeTransition.clear();lastWindows=Collections.emptyList();lastWindowsAt=0;homeInFlight=false;windowFault="";connected=true;live=this;heartbeat=0;fault="";last=0;active.clear();wm=(WindowManager)getSystemService(WINDOW_SERVICE);safe.add(getPackageName());
         try{TelecomManager t=(TelecomManager)getSystemService(TELECOM_SERVICE);if(t!=null){String dialer=t.getDefaultDialerPackage();if(dialer!=null)safe.add(dialer);}}catch(RuntimeException e){Diagnostics.event(this,"通话应用识别不可用",e);}
         try{ResolveInfo home=getPackageManager().resolveActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME),android.content.pm.PackageManager.MATCH_DEFAULT_ONLY);if(home!=null){homePackage=home.activityInfo.packageName;safe.add(homePackage);}}catch(RuntimeException e){Diagnostics.event(this,"桌面识别不可用",e);}
@@ -56,6 +58,7 @@ public final class GuardService extends AccessibilityService {
     @Override public void onAccessibilityEvent(AccessibilityEvent event){
         // A desktop event also handles the system HOME gesture, without waiting for a slow root query.
         if(event.getEventType()==AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED&&!homePackage.isEmpty()&&homePackage.contentEquals(event.getPackageName()==null?"":event.getPackageName())){
+            finishHomeExit(HomeExitTrace.Result.HOME,SystemClock.elapsedRealtime());
             homeTransition.clear();handler.removeCallbacks(homeTimeout);invalidateWindows();hideOverlay();
         }
         requestTick();
@@ -73,12 +76,14 @@ public final class GuardService extends AccessibilityService {
     private void tick(){
         long transitionNow=SystemClock.elapsedRealtime();
         // Every entry path handles expiry, including a pulse racing the timeout callback.
-        if(homeTransition.expired(transitionNow)){homeTransition.clear();invalidateWindows();if(windowReads!=null)windowReads.request();}
+        if(homeTransition.expired(transitionNow)){finishHomeExit(HomeExitTrace.Result.TIMEOUT,transitionNow);homeTransition.clear();invalidateWindows();if(windowReads!=null)windowReads.request();}
         Store s=Store.get(this);if(s.corrupt)throw new IllegalStateException("规则数据损坏");long now=s.now();
         boolean charged=last>0&&now>last&&!active.isEmpty();if(charged)s.book.charge(active,last,now);last=now;
         Set<String> exhausted=new HashSet<>();for(String p:s.book.rules.keySet())if(s.book.blocked(p))exhausted.add(p);
         WindowPolicy.Result windows=WindowPolicy.evaluate(visible(),exhausted);
+        boolean wasLeaving=!homeTransition.source().isEmpty();
         boolean leaving=homeTransition.waiting(transitionNow,focusedPackage);
+        if(wasLeaving&&!leaving)finishHomeExit(homePackage.equals(focusedPackage)?HomeExitTrace.Result.HOME:HomeExitTrace.Result.OTHER_WINDOW,transitionNow);
         if(leaving){String source=homeTransition.source();windows.blocked.removeIf(region->region.pkg.equals(source));}else handler.removeCallbacks(homeTimeout);
         showRegions(windows.blocked);
         active=new HashSet<>();for(String p:windows.visible)if(s.book.rules.containsKey(p)&&!s.book.blocked(p))active.add(p);s.checkpointUsage(charged);if(leaving||homeInFlight)return;long maintenance=SystemClock.elapsedRealtime();if(maintenance-lastMaintenance>=1000){lastMaintenance=maintenance;QuotaWarnings.update(this,s.book);}
@@ -105,10 +110,14 @@ public final class GuardService extends AccessibilityService {
         ScrollView scroll=new ScrollView(this);scroll.setFillViewport(true);scroll.addView(view);LinearLayout host=Ui.column(this);host.setBackgroundColor(Ui.BG);host.addView(scroll,new LinearLayout.LayoutParams(-1,-1));return new Barrier(region.pkg,small,host,home,region.box);
     }
     private void returnHome(String pkg){
-        if(!connected||homeInFlight||!homeTransition.begin(pkg,SystemClock.elapsedRealtime()))return;
+        long pressedAt=SystemClock.elapsedRealtime();
+        if(!connected||homeInFlight||!homeTransition.begin(pkg,pressedAt))return;
         homeInFlight=true;long session=sessionId,sequence=++homeSequence;
+        HomeExitTrace trace=new HomeExitTrace(pressedAt,System.currentTimeMillis());
+        homeExit=trace;Diagnostics.homeExit=trace;
         // Visual dismissal is immediate. Old asynchronous snapshots can no longer put the mask back.
-        hideOverlay();invalidateWindows();handler.removeCallbacks(homeTimeout);handler.postDelayed(homeTimeout,HomeTransition.MAX_MS);
+        boolean removed=hideOverlay();trace.overlayRemoved(SystemClock.elapsedRealtime(),removed);
+        invalidateWindows();handler.removeCallbacks(homeTimeout);handler.postDelayed(homeTimeout,HomeTransition.MAX_MS);
         navigation.execute(()->{
             if(!connected||session!=sessionId)return;
             long at=SystemClock.elapsedRealtime();boolean accepted=false;RuntimeException failure=null;
@@ -116,19 +125,21 @@ public final class GuardService extends AccessibilityService {
             final boolean ok=accepted;final RuntimeException error=failure;final long duration=SystemClock.elapsedRealtime()-at;
             handler.post(()->{
                 if(!connected||session!=sessionId||sequence!=homeSequence)return;
-                homeInFlight=false;Diagnostics.homeRequestMillis=duration;
+                homeInFlight=false;trace.requestFinished(at,duration,ok);
                 if(!ok&&!homeTransition.source().isEmpty()){homeTransition.clear();handler.removeCallbacks(homeTimeout);Diagnostics.event(this,"系统未接受返回桌面操作，恢复拦截",error);Toast.makeText(this,"请使用系统主页手势返回桌面",Toast.LENGTH_SHORT).show();}
                 // Re-enable a restored barrier in place; another exhausted pane stays blocked.
                 for(Barrier b:barriers){b.exit.setEnabled(true);b.exit.setText(b.small?"回桌面":"回到桌面");}requestTick();
             });
         });
     }
-    private void removeBarrier(Barrier b){try{b.view.setVisibility(View.GONE);wm.removeView(b.view);}catch(RuntimeException e){Diagnostics.event(this,"拦截窗口移除失败",e);}}
-    private void hideOverlay(){for(Barrier b:barriers)removeBarrier(b);barriers.clear();overlay=null;barrierKey="";}
+    private void finishHomeExit(HomeExitTrace.Result result,long at){if(homeExit!=null)homeExit.finish(result,at);}
+    private boolean removeBarrier(Barrier b){try{b.view.setVisibility(View.GONE);wm.removeView(b.view);return true;}catch(RuntimeException e){Diagnostics.event(this,"拦截窗口移除失败",e);return false;}}
+    private boolean hideOverlay(){boolean ok=true;for(Barrier b:barriers)ok=removeBarrier(b)&&ok;barriers.clear();overlay=null;barrierKey="";return ok;}
     @Override public void onTaskRemoved(Intent intent){Diagnostics.taskRemoved(this,"无障碍服务收到任务卡片移除");requestTick();super.onTaskRemoved(intent);}
     @Override public void onConfigurationChanged(Configuration c){super.onConfigurationChanged(c);Ui.theme(this);invalidateWindows();hideOverlay();requestTick();}
     @Override public void onInterrupt(){Diagnostics.event(this,"系统请求中断无障碍反馈，继续检查保护状态",null);requestTick();}
     private void disconnect(String reason){
+        finishHomeExit(HomeExitTrace.Result.INTERRUPTED,SystemClock.elapsedRealtime());
         if(!connected)return;connected=false;sessionId++;changeQueued=false;homeTransition.clear();handler.removeCallbacksAndMessages(null);if(windowReads!=null){windowReads.close();windowReads=null;}if(navigation!=null){navigation.shutdownNow();navigation=null;}hideOverlay();if(registered){try{unregisterReceiver(screen);}catch(RuntimeException e){Diagnostics.event(this,"屏幕监听清理失败",e);}registered=false;}
         try{Store s=Store.get(this);long now=s.now();if(last>0)s.book.charge(active,last,now);if(!s.corrupt)s.checkpointAsync();}catch(RuntimeException e){Diagnostics.event(this,"断开时保存失败",e);}
         active.clear();last=0;if(live==this){live=null;heartbeat=0;fault="";}Diagnostics.interrupted(this,reason);PolicyOps.sync(this,false);

@@ -1,3 +1,5 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
-<path android:fillColor="#FFFFFF" android:pathData="M66,62 C69,58 75,58 78,62 C81,66 81,70 77,74 L70,81 C66,85 60,84 57,81 C54,78 54,73 57,70 Z"/><path android:fillColor="#FFFFFF" android:pathData="M33,31 C44,23 60,25 72,32 C78,36 78,44 74,50 L55,77 C53,81 47,82 43,79 C39,76 38,71 42,66 L59,43 C51,39 42,39 35,44 C31,47 26,45 25,41 C24,37 28,33 33,31 Z"/>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="162" android:viewportHeight="162">
+  <group android:translateX="27" android:translateY="27">
+    <path android:fillColor="#FFFFFF" android:fillType="evenOdd" android:pathData="M34,16.2 H74 C81.3,16.2 84.8,20.5 84.8,26.5 C84.8,37.7 77.2,45.5 67.9,51.9 C64.9,54 63.4,55.6 63.4,57.5 C63.4,60.7 66.8,63.1 70.9,66.3 C78.8,72.4 84.3,79.6 84.3,85.8 C84.3,90.5 80.9,93.3 75.2,93.3 H32.8 C27.1,93.3 23.7,90.5 23.7,85.8 C23.7,79.6 29.2,72.4 37.1,66.3 C41.2,63.1 44.6,60.7 44.6,57.5 C44.6,55.6 43.1,54 40.1,51.9 C30.8,45.5 23.2,37.7 23.2,26.5 C23.2,20.5 26.7,16.2 34,16.2 Z M31,36.7 H72.4 C77,36.7 77.8,38.5 75.2,42 C68.1,51.1 54.9,61.1 41,78 H33.9 C42.2,64.1 53.9,54.1 63.8,44.4 C64.7,43.5 64.2,43 63,43 H31 Z" />
+  </group>
 </vector>

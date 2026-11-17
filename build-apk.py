@@ -22,7 +22,7 @@ def tool(name):
 java=jdk_tool('java')
 run(sys.executable,ROOT/'native-home/build-assets.py')
 run(tool('aapt2'),'compile','--dir',ROOT/'app/src/main/res','-o',out/'resources.zip')
-run(tool('aapt2'),'link','-o',out/'base.apk','--manifest',ROOT/'app/src/main/AndroidManifest.xml','-I',jar,'--java',out/'generated','--min-sdk-version','26','--target-sdk-version','35','--version-code','13','--version-name','0.6.5',out/'resources.zip')
+run(tool('aapt2'),'link','-o',out/'base.apk','--manifest',ROOT/'app/src/main/AndroidManifest.xml','-I',jar,'--java',out/'generated','--min-sdk-version','26','--target-sdk-version','35','--version-code','15','--version-name','0.6.7',out/'resources.zip')
 sources=[f for folder in [ROOT/'app/src/main/java',out/'generated'] for f in folder.rglob('*.java') if f.is_file() and not any(part.startswith('.') for part in f.relative_to(folder).parts)]
 run(java,'-m','jdk.compiler/com.sun.tools.javac.Main','-encoding','UTF-8','-source','17','-target','17','-classpath',jar,'-d',out/'classes',*sources)
 run(java,'-cp',bt/'lib/d8.jar','com.android.tools.r8.D8','--lib',jar,'--min-api','26','--output',out/'dex',*[f for f in (out/'classes').rglob('*.class') if f.is_file() and not any(x.startswith('.') for x in f.relative_to(out/'classes').parts)])
@@ -32,7 +32,7 @@ with zipfile.ZipFile(out/'base.apk','a',zipfile.ZIP_DEFLATED) as z:
         if f.is_file():z.write(f,'assets/'+f.relative_to(ROOT/'app/src/main/assets').as_posix())
 run(tool('zipalign'),'-f','4',out/'base.apk',out/'aligned.apk')
 suffix='' if os.environ.get('SEVENDAYS_KEYSTORE') else '-debug'
-apk=ROOT/f'SevenDays-0.6.5{suffix}.apk'
+apk=ROOT/f'SevenDays-0.6.7{suffix}.apk'
 sign_apk(bt,out/'aligned.apk',apk)
 run(java,'-jar',bt/'lib/apksigner.jar','verify','--verbose',apk)
 print('APK:',apk)

@@ -119,10 +119,26 @@ html,body{margin:0;width:100%;min-height:100%;background:transparent}
 #sevendays-refined-preview .so-summary{flex-wrap:wrap;gap:8px;padding-top:15px}
 #sevendays-refined-preview .so-summary strong{font-size:24px}
 #sevendays-refined-preview .so-connected{background:transparent;min-height:44px;padding:3px 0;flex:none}
-#sevendays-refined-preview .so-disconnected i{background:var(--so-primary)}
-#sevendays-refined-preview .so-alert{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--so-soft);color:var(--so-primary);margin:4px 20px 8px;padding:12px 15px;border-radius:16px;min-height:48px;text-align:left;font-size:13px}
+#sevendays-refined-preview .so-disconnected i{background:light-dark(#9c692c,#ddbc84)}
+#sevendays-refined-preview .so-alert{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--so-soft);color:var(--so-primary);margin:4px 20px 8px;padding:10px 14px;border-radius:16px;min-height:52px;text-align:left;font-size:14px}
+#sevendays-refined-preview .so-alert-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+#sevendays-refined-preview .so-alert-label{font-size:.95em;font-weight:600;color:var(--so-ink);overflow-wrap:anywhere}
+#sevendays-refined-preview .so-alert-action{font-size:.85em}
+#sevendays-refined-preview .so-orbit-toolbar{flex-wrap:wrap;padding-inline:20px}
+#sevendays-refined-preview .so-layout-switch{display:inline-flex;gap:2px;padding:3px;border-radius:16px;background:var(--so-soft);margin-inline-end:auto}
+#sevendays-refined-preview .so-layout-switch button{min-height:44px;min-width:52px;padding:4px 10px;font-size:.94em;border-radius:13px;background:transparent;color:var(--so-primary)}
+#sevendays-refined-preview .so-layout-switch button[aria-pressed=true]{background:var(--so-primary);color:var(--so-on-primary);font-weight:600}
+#sevendays-refined-preview .so-layout-switch button[aria-pressed=false]:active{background:var(--so-surface)}
+#sevendays-refined-preview .so-theme{min-height:44px}
+#sevendays-refined-preview .so-count{min-width:44px;text-align:center}
 #sevendays-refined-preview .so-stage{height:clamp(210px,calc(100dvh - 440px),330px);flex:none;cursor:auto}
 #sevendays-refined-preview .so-selection-time{font-size:34px}
+#sevendays-refined-preview .so-time-line{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:10px;margin-top:12px}
+#sevendays-refined-preview .so-hourglass{width:28px;height:37px;overflow:visible}
+#sevendays-refined-preview .so-glass-body{fill:var(--so-soft)}
+#sevendays-refined-preview .so-glass-edge{fill:none;stroke:var(--so-primary);stroke-width:1.8}
+#sevendays-refined-preview .so-sand{fill:var(--so-primary)}
+#sevendays-refined-preview .so-sand-base{opacity:.7}
 #sevendays-refined-preview .so-card-foot{align-items:flex-start;flex-wrap:wrap}
 #sevendays-refined-preview .so-lock-label{margin-left:auto;text-align:right}
 #sevendays-refined-preview .so-footer{margin-top:auto;padding-bottom:18px}
@@ -138,15 +154,33 @@ html,body{margin:0;width:100%;min-height:100%;background:transparent}
 <div id="sevendays-refined-preview" data-appearance="__SEVEN_THEME__">
   <section class="so-phone" aria-label="SevenDays首页">
     <header class="so-header">
-      <canvas class="so-brand" width="108" height="108" aria-hidden="true"></canvas>
+      <svg class="so-brand" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" aria-hidden="true" focusable="false">
+        <defs>
+          <clipPath id="sd-glass-clip"><path d="M34,16.2 H74 C81.3,16.2 84.8,20.5 84.8,26.5 C84.8,37.7 77.2,45.5 67.9,51.9 C64.9,54 63.4,55.6 63.4,57.5 C63.4,60.7 66.8,63.1 70.9,66.3 C78.8,72.4 84.3,79.6 84.3,85.8 C84.3,90.5 80.9,93.3 75.2,93.3 H32.8 C27.1,93.3 23.7,90.5 23.7,85.8 C23.7,79.6 29.2,72.4 37.1,66.3 C41.2,63.1 44.6,60.7 44.6,57.5 C44.6,55.6 43.1,54 40.1,51.9 C30.8,45.5 23.2,37.7 23.2,26.5 C23.2,20.5 26.7,16.2 34,16.2 Z"/></clipPath>
+          <linearGradient id="sd-glass" gradientUnits="userSpaceOnUse" x1="54" y1="16" x2="54" y2="94"><stop offset="0" stop-color="#D0FEF4"/><stop offset="0.12" stop-color="#B1F4E3"/><stop offset="0.26" stop-color="#C5FDEF"/><stop offset="0.57" stop-color="#BDF9E8"/><stop offset="0.82" stop-color="#AFF4E0"/><stop offset="1" stop-color="#B9FBE9"/></linearGradient>
+          <radialGradient id="sd-lower-shade" gradientUnits="userSpaceOnUse" cx="54" cy="73" r="25"><stop offset="0" stop-color="#5FC8AF"/><stop offset="0.48" stop-color="#81DCC4" stop-opacity="0.74"/><stop offset="1" stop-color="#81DCC4" stop-opacity="0"/></radialGradient>
+          <radialGradient id="sd-upper-shade" gradientUnits="userSpaceOnUse" cx="55" cy="43" r="25"><stop offset="0" stop-color="#218D78"/><stop offset="0.38" stop-color="#4DB49E" stop-opacity="0.94"/><stop offset="0.7" stop-color="#74D3B9" stop-opacity="0.59"/><stop offset="1" stop-color="#74D3B9" stop-opacity="0"/></radialGradient>
+          <linearGradient id="sd-sand" gradientUnits="userSpaceOnUse" x1="54" y1="74.4" x2="54" y2="93.3"><stop offset="0" stop-color="#D1FEF4"/><stop offset="0.46" stop-color="#A6F2DE"/><stop offset="0.7" stop-color="#9CECD7"/><stop offset="1" stop-color="#B8FCEB"/></linearGradient>
+          <linearGradient id="sd-seven" gradientUnits="userSpaceOnUse" x1="54" y1="36.7" x2="54" y2="78"><stop offset="0" stop-color="#896ADB"/><stop offset="0.5" stop-color="#A289ED"/><stop offset="1" stop-color="#8161D7"/></linearGradient>
+        </defs>
+        <rect width="108" height="108" rx="27" fill="#014742"/>
+        <path fill="url(#sd-glass)" d="M34,16.2 H74 C81.3,16.2 84.8,20.5 84.8,26.5 C84.8,37.7 77.2,45.5 67.9,51.9 C64.9,54 63.4,55.6 63.4,57.5 C63.4,60.7 66.8,63.1 70.9,66.3 C78.8,72.4 84.3,79.6 84.3,85.8 C84.3,90.5 80.9,93.3 75.2,93.3 H32.8 C27.1,93.3 23.7,90.5 23.7,85.8 C23.7,79.6 29.2,72.4 37.1,66.3 C41.2,63.1 44.6,60.7 44.6,57.5 C44.6,55.6 43.1,54 40.1,51.9 C30.8,45.5 23.2,37.7 23.2,26.5 C23.2,20.5 26.7,16.2 34,16.2 Z"/>
+        <g clip-path="url(#sd-glass-clip)"><path fill="url(#sd-lower-shade)" d="M18,42 H90 V95 H18 Z"/><path fill="url(#sd-upper-shade)" d="M30,43 H79 V68 H30 Z"/><path fill="url(#sd-sand)" d="M20,86 C33,82.9 42.7,74.4 55.2,74.4 C67.9,74.4 77.3,82.3 88,86 V95 H20 Z"/></g>
+        <path fill="url(#sd-seven)" d="M31,36.7 H72.4 C77,36.7 77.8,38.5 75.2,42 C68.1,51.1 54.9,61.1 41,78 H33.9 C42.2,64.1 53.9,54.1 63.8,44.4 C64.7,43.5 64.2,43 63,43 H31 Z"/>
+      </svg>
       <h2>SevenDays</h2>
       <button class="so-icon so-settings" type="button" aria-label="设备与权限">设置</button>
     </header>
-    <div class="so-summary"><div><span class="so-summary-label">今日用时</span><strong>0 分钟</strong></div><button class="so-connected" type="button" aria-label="检查保护状态"><i aria-hidden="true"></i><span class="so-status-label">未连接</span></button></div>
-    <button class="so-alert" type="button" hidden><span class="so-alert-label"></span><span aria-hidden="true">›</span></button>
+    <div class="so-summary"><div><span class="so-summary-label">今日用时</span><strong>0 分钟</strong></div><button class="so-connected" type="button" aria-label="检查保护状态"><i aria-hidden="true"></i><span class="so-status-label">待确认</span></button></div>
+    <button class="so-alert" type="button" hidden>
+      <span class="so-alert-copy"><strong class="so-alert-label"></strong><small class="so-alert-action"></small></span><span aria-hidden="true">›</span>
+    </button>
     <div class="so-orbit-toolbar">
+      <span class="so-layout-switch" role="group" aria-label="首页布局">
+        <button type="button" aria-pressed="true">星环</button><button class="so-open-list" type="button" aria-pressed="false">列表</button>
+      </span>
       <button class="so-theme" type="button" aria-label="选择外观主题，当前土星环"><span class="so-theme-dot" aria-hidden="true"></span><span class="so-theme-name">土星环</span><span aria-hidden="true">⌄</span></button>
-      <span class="so-motion-label">已停稳</span>
+      
       <button class="so-icon so-brake" type="button" aria-label="转动卡片">▷</button>
     </div>
     <div class="so-stage" aria-label="应用轨道，滑动切换，轻点停止">
@@ -157,14 +191,22 @@ html,body{margin:0;width:100%;min-height:100%;background:transparent}
     </div>
     <div class="so-controls">
       <button class="so-icon so-prev" type="button" aria-label="上一个应用">‹</button>
-      <button class="so-index" type="button" aria-label="选择应用"><span>全部应用</span><span class="so-count">0 / 0</span><span aria-hidden="true">⌄</span></button>
+      <span class="so-count" aria-hidden="true">0 / 0</span>
       <button class="so-icon so-next" type="button" aria-label="下一个应用">›</button>
     </div>
     <p class="so-empty">尚未添加应用</p>
     <button class="so-selected" type="button" hidden aria-label="查看当前应用规则">
       <span class="so-selected-heading"><canvas class="so-app-icon so-current-icon" width="96" height="96" aria-hidden="true"></canvas><span class="so-selection-words"><strong class="so-selection-name">未选择应用</strong><span class="so-selection-quota"></span></span><span class="so-card-chevron" aria-hidden="true">›</span></span>
-      <span class="so-time-line"><span class="so-remaining-label">剩余时间</span><span class="so-selection-time">00:00</span></span>
-      <span class="so-remaining-track" aria-hidden="true"><span class="so-remaining-fill"></span></span>
+      <span class="so-time-line"><svg class="so-hourglass" viewBox="0 0 40 52" aria-hidden="true" focusable="false">
+        <defs><clipPath id="sd-quota-glass"><path d="M9 5 H31 Q35 5 35 9 C35 16 28.5 20 22.7 24 Q20 26 22.7 28 C28.5 32 35 36 35 43 Q35 47 31 47 H9 Q5 47 5 43 C5 36 11.5 32 17.3 28 Q20 26 17.3 24 C11.5 20 5 16 5 9 Q5 5 9 5 Z"/></clipPath></defs>
+        <path class="so-glass-body" d="M9 5 H31 Q35 5 35 9 C35 16 28.5 20 22.7 24 Q20 26 22.7 28 C28.5 32 35 36 35 43 Q35 47 31 47 H9 Q5 47 5 43 C5 36 11.5 32 17.3 28 Q20 26 17.3 24 C11.5 20 5 16 5 9 Q5 5 9 5 Z"/>
+        <g class="so-sand" clip-path="url(#sd-quota-glass)">
+          <rect class="so-sand-top" x="4" y="25" width="32" height="0"/>
+          <rect class="so-sand-base" x="4" y="47" width="32" height="0"/>
+        </g>
+        <path class="so-glass-edge" d="M9 5 H31 Q35 5 35 9 C35 16 28.5 20 22.7 24 Q20 26 22.7 28 C28.5 32 35 36 35 43 Q35 47 31 47 H9 Q5 47 5 43 C5 36 11.5 32 17.3 28 Q20 26 17.3 24 C11.5 20 5 16 5 9 Q5 5 9 5 Z"/>
+      </svg><span class="so-remaining-label">剩余时间</span><span class="so-selection-time">00:00</span></span>
+      
       <span class="so-card-foot"><span class="so-used-label">已用 0 分钟</span><span class="so-lock-label"></span></span>
     </button>
     <footer class="so-footer"><button class="so-add" type="button">＋ 添加应用</button></footer>
@@ -291,24 +333,42 @@ window.SevenSheetMotion=(()=>{
   const dark=matchMedia('(prefers-color-scheme:dark)'),systemReduced=matchMedia('(prefers-reduced-motion:reduce)');
   let apps=[],engine,themeId='saturn',colors={},selected=0,angle=0,velocity=0,tween=null,pointer=null,frame=0,lastFrame=0,wheelTimer=0,paused=false,reduced=false,nativeReduced=false,restoreFocus=null,structure='',received=false,lastAnnounced='',pageLock=null;
   const images=new Map(),clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),period=()=>Math.max(1,apps.length)*STEP;
+  const hourglass=$('.so-hourglass'),sandTop=$('.so-sand-top'),sandBase=$('.so-sand-base');
+  let lastSandRatio=-1,lastSandState='',sandMotion;
   const wrap=a=>((a+period()/2)%period()+period())%period()-period()/2;
   const nearest=()=>apps.length?((Math.round(-angle/STEP)%apps.length)+apps.length)%apps.length:0;
-  const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const appTime=a=>a.quota===0?'全天禁用':a.remaining<=0?'已到限':a.remaining>=3600?`${Math.floor(a.remaining/3600)}:${String(Math.floor(a.remaining%3600/60)).padStart(2,'0')}:${String(a.remaining%60).padStart(2,'0')}`:`${String(Math.floor(a.remaining/60)).padStart(2,'0')}:${String(a.remaining%60).padStart(2,'0')}`;
   function readColors(){const cs=getComputedStyle(root),probe=document.createElement('span');probe.hidden=true;root.append(probe);for(const [key,variable]of Object.entries({surface:'--so-surface',ink:'--so-ink',muted:'--so-muted',soft:'--so-soft',primary:'--so-primary'})){probe.style.color=cs.getPropertyValue(variable).trim();colors[key]=getComputedStyle(probe).color;}probe.remove();}
-  function brand(){const ctx=$('.so-brand').getContext('2d'),a=Kit.appearances[themeId],paths=[[a.brand,'M27 4H81Q104 4 104 27V81Q104 104 81 104H27Q4 104 4 81V27Q4 4 27 4Z'],[a.accent,'M66 62C69 58 75 58 78 62C81 66 81 70 77 74L70 81C66 85 60 84 57 81C54 78 54 73 57 70Z'],['#fcfaff','M33 31C44 23 60 25 72 32C78 36 78 44 74 50L55 77C53 81 47 82 43 79C39 76 38 71 42 66L59 43C51 39 42 39 35 44C31 47 26 45 25 41C24 37 28 33 33 31Z']];ctx.clearRect(0,0,108,108);for(const [color,path]of paths){ctx.fillStyle=color;ctx.fill(new Path2D(path));}}
   function drawIcon(ctx,a,x,y,size){ctx.fillStyle=colors.surface;ctx.fillRect(x,y,size,size);if(!a)return;const image=images.get(a.pkg);if(image?.complete&&image.naturalWidth){ctx.drawImage(image,x,y,size,size);return;}ctx.save();ctx.fillStyle=colors.soft;ctx.beginPath();ctx.roundRect(x,y,size,size,size*.23);ctx.fill();ctx.fillStyle=colors.primary;ctx.font=`500 ${size*.48}px system-ui`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(Array.from(a.name)[0]||'·',x+size/2,y+size*.52);ctx.restore();}
-  function paintIcons(){if(apps.length)drawIcon($('.so-current-icon').getContext('2d'),apps[selected],0,0,96);if(!$('.so-modal').hidden)root.querySelectorAll('[data-package-icon]').forEach(c=>{const a=apps.find(a=>a.pkg===c.dataset.packageIcon);if(a)drawIcon(c.getContext('2d'),a,0,0,96);});}
+  function paintIcons(){if(apps.length)drawIcon($('.so-current-icon').getContext('2d'),apps[selected],0,0,96);}
   function draw(){if(engine){engine.render(angle,selected);root.dataset.renderer=engine.kind;}}
   const gain=()=>Math.min(1,apps.length/7),moving=()=>!!tween||!!pointer?.dragged||Math.abs(velocity)>.025;
-  function motionLabel(){const active=moving();$('.so-motion-label').textContent=active?'旋转中':'已停稳';$('.so-brake').textContent=active?'Ⅱ':'▷';$('.so-brake').setAttribute('aria-label',active?'立即停止旋转':'转动卡片');}
+  function motionLabel(){const active=moving();$('.so-brake').textContent=active?'Ⅱ':'▷';$('.so-brake').setAttribute('aria-label',active?'立即停止旋转':'转动卡片');}
+  function updateSand(app){
+    const ratio=app.quota?clamp(app.remaining/(app.quota*60),0,1):0;
+    if(lastSandRatio!==ratio){
+      // A narrowing chamber holds less sand per row near the waist.
+      const level=Math.sqrt(ratio),upper=20*level,lower=19*(1-level);
+      sandTop.setAttribute('y',25-upper);sandTop.setAttribute('height',upper);
+      sandBase.setAttribute('y',47-lower);sandBase.setAttribute('height',lower);
+      lastSandRatio=ratio;
+    }
+    if(!moving()){
+      const state=app.pkg+'|'+(app.remaining>0?'available':'empty');
+      if(lastSandState&&state!==lastSandState&&!paused&&!reduced&&!document.hidden&&hourglass.animate){
+        if(sandMotion)sandMotion.cancel();
+        sandMotion=hourglass.animate([{opacity:.55,transform:'translateY(-2px)'},{opacity:1,transform:'translateY(0)'}],{duration:210,easing:'ease-out'});
+      }
+      lastSandState=state;
+    }
+  }
   function announce(){const a=apps[selected];if(!a)return;const text=`已选 ${a.name}，${appTime(a)}`;if(text!==lastAnnounced){$('.so-sr').textContent=text;lastAnnounced=text;}}
-  function updateSelection(force=false){const next=nearest(),changed=next!==selected;selected=next;const has=apps.length>0;$('.so-selected').hidden=!has;$('.so-empty').hidden=has;$('.so-controls').hidden=!has;for(const s of ['.so-prev','.so-next','.so-brake'])$(s).disabled=apps.length<2;stage.style.touchAction=apps.length<2?'pan-y':'none';if(!has)return;const a=apps[selected];$('.so-count').textContent=`${selected+1} / ${apps.length}`;$('.so-selection-name').textContent=a.name;$('.so-selection-quota').textContent=a.quota===0?'全天禁用':`每天 ${a.quota} 分钟`;$('.so-selection-time').textContent=appTime(a);$('.so-selection-time').classList.toggle('so-exhausted',!a.remaining);$('.so-remaining-label').textContent=a.quota===0?'规则':a.remaining?'剩余时间':'今日额度';$('.so-remaining-fill').style.width=(a.quota?clamp(a.remaining/(a.quota*60),0,1)*100:0)+'%';$('.so-used-label').textContent=a.usedLabel;$('.so-lock-label').textContent=a.lockLabel;$('.so-selected').setAttribute('aria-label',`${a.name}，${appTime(a)}，查看规则`);if(changed||force)paintIcons();if(changed)post('select',a.pkg);}
+  function updateSelection(force=false){const next=nearest(),changed=next!==selected;selected=next;const has=apps.length>0;$('.so-selected').hidden=!has;$('.so-empty').hidden=has;$('.so-controls').hidden=!has;for(const s of ['.so-prev','.so-next','.so-brake'])$(s).disabled=apps.length<2;stage.style.touchAction=apps.length<2?'pan-y':'none';if(!has){lastSandState="";return;}const a=apps[selected];$('.so-count').textContent=`${selected+1} / ${apps.length}`;$('.so-selection-name').textContent=a.name;$('.so-selection-quota').textContent=a.quota===0?'全天禁用':`每天 ${a.quota} 分钟`;$('.so-selection-time').textContent=appTime(a);$('.so-selection-time').classList.toggle('so-exhausted',!a.remaining);$('.so-remaining-label').textContent=a.quota===0?'规则':a.remaining?'剩余时间':'今日额度';updateSand(a);$('.so-used-label').textContent=a.usedLabel;$('.so-lock-label').textContent=a.lockLabel;$('.so-selected').setAttribute('aria-label',`${a.name}，${a.remaining>0?'剩余 ':''}${appTime(a)}，查看规则`);if(changed||force)paintIcons();if(changed)post('select',a.pkg);}
   function freeze(){if(pointer)try{stage.releasePointerCapture(pointer.id);}catch(error){}pointer=null;velocity=0;tween=null;clearTimeout(wheelTimer);if(frame)cancelAnimationFrame(frame);frame=0;lastFrame=0;updateSelection();motionLabel();draw();}
   function wake(){if(!frame&&!paused&&!document.hidden&&$('.so-modal').hidden){lastFrame=performance.now();frame=requestAnimationFrame(tick);}}
   function tick(now){frame=0;const dt=clamp((now-lastFrame)/1000,0,.04);lastFrame=now;if(tween){const p=clamp((now-tween.start)/tween.duration,0,1);angle=wrap(tween.from+tween.delta*(1-Math.pow(1-p,3)));if(p===1){const done=tween.done;tween=null;velocity=0;updateSelection();motionLabel();draw();announce();if(done)done();return;}}else if(!pointer&&Math.abs(velocity)>.025){angle=wrap(angle+velocity*dt);velocity*=Math.exp(-1.2*dt);if(Math.abs(velocity)<.07){velocity=0;focusApp(nearest());return;}}updateSelection();motionLabel();draw();if(moving())frame=requestAnimationFrame(tick);}
   function focusApp(index,done){if(!apps.length)return;index=((index%apps.length)+apps.length)%apps.length;velocity=0;const target=-index*STEP,delta=wrap(target-angle);if(reduced||paused||document.hidden||Math.abs(delta)<.002){angle=wrap(target);tween=null;updateSelection(true);motionLabel();draw();announce();if(done)done();return;}tween={from:angle,delta,start:performance.now(),duration:clamp(260+Math.abs(delta)*32,260,580),done};wake();}
-  function setAppearance(id,notify=false){if(!Object.prototype.hasOwnProperty.call(Kit.appearances,id))return;freeze();themeId=id;root.dataset.appearance=id;$('.so-theme-name').textContent=Kit.appearances[id].name;$('.so-theme').setAttribute('aria-label','选择外观主题，当前'+Kit.appearances[id].name);readColors();brand();if(engine)engine.setTheme(id);updateSelection(true);draw();if(notify)post('theme',id);}
+  function setAppearance(id,notify=false){if(!Object.prototype.hasOwnProperty.call(Kit.appearances,id))return;freeze();themeId=id;root.dataset.appearance=id;$('.so-theme-name').textContent=Kit.appearances[id].name;$('.so-theme').setAttribute('aria-label','选择外观主题，当前'+Kit.appearances[id].name);readColors();if(engine)engine.setTheme(id);updateSelection(true);draw();if(notify)post('theme',id);}
   function lockPage(){if(pageLock)return;pageLock={html:document.documentElement.style.overflow,body:document.body.style.overflow,y:scrollY};document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';}
   function unlockPage(){if(!pageLock)return;const saved=pageLock;pageLock=null;document.documentElement.style.overflow=saved.html;document.body.style.overflow=saved.body;window.scrollTo(0,saved.y);}
   function showModal(title,html,setup){sheetMotion.reset();freeze();lockPage();restoreFocus=document.activeElement;$('#so-sheet-title').textContent=title;$('.so-sheet-content').innerHTML=html;$('.so-modal').hidden=false;for(const child of $('.so-phone').children)if(!child.classList.contains('so-modal')&&!child.classList.contains('so-sr'))child.inert=true;$('.so-sheet-content').scrollTop=0;if(setup)setup($('.so-sheet-content'));paintIcons();$('.so-close').focus({preventScroll:true});post('modal','open');}
@@ -320,9 +380,10 @@ window.SevenSheetMotion=(()=>{
   $('.so-prev').addEventListener('click',()=>{freeze();focusApp(selected-1);});$('.so-next').addEventListener('click',()=>{freeze();focusApp(selected+1);});
   $('.so-brake').addEventListener('click',()=>{if(moving()){freeze();return;}if(reduced){focusApp(selected+1);return;}velocity=1.5*gain();motionLabel();wake();});
   $('.so-selected').addEventListener('click',details);
-  for(const s of ['.so-settings','.so-connected','.so-alert'])$(s).addEventListener('click',()=>{freeze();post('settings');});
+  $('.so-settings').addEventListener('click',()=>{freeze();post('settings');});
+  for(const selector of ['.so-connected','.so-alert'])$(selector).addEventListener('click',()=>{freeze();post('protection');});
+  $('.so-open-list').addEventListener('click',()=>{freeze();post('layout','list');});
   $('.so-add').addEventListener('click',()=>{freeze();post('add');});
-  $('.so-index').addEventListener('click',()=>showModal('全部应用',`<button class="so-setting so-sort" type="button"><span>调整显示顺序</span><span>›</span></button>`+apps.map(a=>`<button class="so-app-choice" type="button" data-select-package="${escape(a.pkg)}"><canvas class="so-app-icon" width="96" height="96" data-package-icon="${escape(a.pkg)}" aria-hidden="true"></canvas><strong>${escape(a.name)}</strong><span class="so-choice-time">${appTime(a)}</span></button>`).join(''),body=>{body.querySelector('.so-sort').addEventListener('click',()=>{closeModal();post('sort');});body.querySelectorAll('[data-select-package]').forEach(b=>b.addEventListener('click',()=>{const i=apps.findIndex(a=>a.pkg===b.dataset.selectPackage);closeModal();if(i>=0)focusApp(i);}));}));
   stage.addEventListener('pointerdown',e=>{if(e.button>0||pointer||!apps.length)return;const wasMoving=moving();freeze();pointer={id:e.pointerId,x:e.clientX,y:e.clientY,lastX:e.clientX,lastY:e.clientY,lastTime:performance.now(),wasMoving,dragged:false,axis:null,samples:[]};stage.setPointerCapture(e.pointerId);});
   stage.addEventListener('pointermove',e=>{if(!pointer||e.pointerId!==pointer.id)return;const p=pointer,dx=e.clientX-p.x,dy=e.clientY-p.y;if(!p.dragged&&Math.hypot(dx,dy)>5){p.dragged=true;p.axis=Math.abs(dy)>Math.abs(dx)*1.25?'y':'x';}if(!p.dragged||apps.length<2)return;const now=performance.now(),delta=(p.axis==='y'?-(e.clientY-p.lastY)*.012:(e.clientX-p.lastX)*.012)*gain();angle=wrap(angle+delta);p.samples.push({d:delta,t:now});p.samples=p.samples.filter(s=>now-s.t<110);p.lastX=e.clientX;p.lastY=e.clientY;p.lastTime=now;updateSelection();motionLabel();draw();});
   function endPointer(e,cancelled){if(!pointer||pointer.id!==e.pointerId)return;const p=pointer;pointer=null;try{stage.releasePointerCapture(e.pointerId);}catch(error){}if(cancelled){freeze();return;}if(p.dragged){if(apps.length<2){freeze();return;}if(reduced){focusApp(nearest());return;}const now=performance.now(),samples=p.samples.filter(s=>now-s.t<110),elapsed=samples.length>1?(samples.at(-1).t-samples[0].t)/1000:.07;velocity=samples.length?clamp(samples.reduce((v,s)=>v+s.d,0)/Math.max(.04,elapsed),-6.5*gain(),6.5*gain()):0;if(now-p.lastTime>140)velocity=0;if(Math.abs(velocity)>.15){motionLabel();wake();}else focusApp(nearest());return;}if(p.wasMoving){freeze();return;}const index=engine.hit(e.clientX,e.clientY);if(index===null){freeze();return;}if(index===selected)focusApp(index,details);else focusApp(index);}
@@ -330,18 +391,28 @@ window.SevenSheetMotion=(()=>{
   stage.addEventListener('wheel',e=>{if(!$('.so-modal').hidden||apps.length<2)return;e.preventDefault();freeze();const delta=clamp(Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY,-200,200);angle=wrap(angle+delta*.008*gain());updateSelection();draw();wheelTimer=setTimeout(()=>{if(reduced)focusApp(nearest());else{velocity=clamp(delta*.025,-3,3)*gain();motionLabel();wake();}},90);},{passive:false});
   root.addEventListener('keydown',e=>{if(!$('.so-modal').hidden){if(e.key==='Escape'){e.preventDefault();closeModal(true);}if(e.key==='Tab'){const list=[...$('.so-sheet').querySelectorAll('button:not(:disabled)')],first=list[0],last=list.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}return;}if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();freeze();focusApp(selected+(['ArrowRight','ArrowDown'].includes(e.key)?1:-1));}});
   function accept(encoded){const data=decode(encoded),oldPkg=apps[selected]?.pkg,key=data.apps.map(a=>a.pkg+'\0'+a.name).join('\n'),changed=key!==structure;nativeReduced=!!data.reduced;reduced=nativeReduced||systemReduced.matches;
-    apps=data.apps;$('.so-summary strong').textContent=data.totalLabel;$('.so-status-label').textContent=data.connected?'已连接':data.granted?'未连接':'未启用';$('.so-connected').classList.toggle('so-disconnected',!data.connected);$('.so-alert').hidden=!data.error&&(data.connected||!apps.length);$('.so-alert-label').textContent=data.error||data.status;$('.so-empty').textContent=data.corrupt?'规则无法读取':'尚未添加应用';
+    apps=data.apps;$('.so-summary strong').textContent=data.totalLabel;
+    const protection=$('.so-connected'),alert=$('.so-alert'),running=data.protection==='RUNNING';
+    const warning=data.protection==='ISSUE'||(!running&&apps.length>0);
+    protection.hidden=warning;
+    protection.classList.toggle('so-disconnected',!running);
+    $('.so-status-label').textContent=data.statusLabel;
+    protection.setAttribute('aria-label',data.statusLabel+'，'+data.statusAction);
+    alert.hidden=!warning;
+    $('.so-alert-label').textContent=data.statusMessage;
+    $('.so-alert-action').textContent=data.statusAction;
+    $('.so-empty').textContent=data.corrupt?'规则无法读取':'尚未添加应用';
     if(themeId!==data.theme)setAppearance(data.theme);
     if(changed||!received){freeze();structure=key;const wanted=apps.findIndex(a=>a.pkg===(received?oldPkg:data.selectedPkg));selected=Math.max(0,wanted);angle=wrap(-selected*STEP);engine.clearTextures();updateSelection(true);draw();if(apps.length)post('select',apps[selected].pkg);}else updateSelection();
-    if(!$('.so-modal').hidden){const models=new Map(apps.map(a=>[a.pkg,a]));root.querySelectorAll('[data-select-package]').forEach(b=>{const a=models.get(b.dataset.selectPackage),value=b.querySelector('.so-choice-time');if(a&&value)value.textContent=appTime(a);});}received=true;motionLabel();if(reduced&&moving()){freeze();focusApp(nearest());}
+    received=true;motionLabel();if(reduced&&moving()){freeze();focusApp(nearest());}
   }
   function acceptIcons(encoded){for(const [pkg,value]of Object.entries(decode(encoded))){if(!value)continue;const img=new Image();img.onload=()=>{if(!apps.some(a=>a.pkg===pkg)){images.delete(pkg);return;}engine.clearTextures();paintIcons();draw();};img.src='data:image/png;base64,'+value;images.set(pkg,img);}}
-  function suspend(){paused=true;freeze();if(sheetMotion.closing)closeModal(false);else sheetMotion.reset();}
+  function suspend(){paused=true;if(sandMotion)sandMotion.cancel();freeze();if(sheetMotion.closing)closeModal(false);else sheetMotion.reset();}
   function resume(){paused=false;updateSelection(true);draw();}
   themeId=root.dataset.appearance==='star'?'star':root.dataset.appearance==='aurora'?'aurora':'saturn';setAppearance(themeId);engine=new window.SevenOrbitRenderer.Renderer($('.so-webgl'),$('.so-fallback-cards'),{apps:()=>apps,colors:()=>colors,dark:()=>dark.matches,drawIcon,theme:themeId,onSelect:index=>{freeze();if(index===selected)focusApp(index,details);else focusApp(index);}});root.dataset.renderer=engine.kind;updateSelection(true);motionLabel();draw();
   new ResizeObserver(()=>{engine.resize();draw();}).observe(stage);
-  dark.addEventListener('change',()=>{readColors();brand();engine.setTheme(themeId);root.querySelectorAll('[data-appearance-choice]').forEach(b=>Kit.thumbnail(b.querySelector('canvas'),b.dataset.appearanceChoice,dark.matches));draw();});
-  systemReduced.addEventListener('change',()=>{reduced=nativeReduced||systemReduced.matches;freeze();focusApp(nearest());});document.addEventListener('visibilitychange',()=>{if(document.hidden)freeze();else draw();});
+  dark.addEventListener('change',()=>{readColors();engine.setTheme(themeId);root.querySelectorAll('[data-appearance-choice]').forEach(b=>Kit.thumbnail(b.querySelector('canvas'),b.dataset.appearanceChoice,dark.matches));draw();});
+  systemReduced.addEventListener('change',()=>{reduced=nativeReduced||systemReduced.matches;if(reduced&&sandMotion)sandMotion.cancel();freeze();focusApp(nearest());});document.addEventListener('visibilitychange',()=>{if(document.hidden)freeze();else draw();});
   $('.so-webgl').addEventListener('webglcontextlost',e=>{e.preventDefault();freeze();engine.forceFallback();root.dataset.renderer=engine.kind;draw();});
   window.SevenNativeHome={accept,icons:acceptIcons,select:encoded=>{const i=apps.findIndex(a=>a.pkg===decode(encoded).pkg);if(i>=0)focusApp(i);},themes,close:()=>closeModal(true),suspend,resume,getState:()=>({theme:themeId,selected,count:apps.length,moving:moving(),angle,modal:!$('.so-modal').hidden,sheetMoving:sheetMotion.moving,...engine.stats()})};
   post('ready');

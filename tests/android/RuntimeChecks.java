@@ -118,7 +118,7 @@ public class RuntimeChecks extends Instrumentation {
             check(s.book.rules.size()==3,"over-install preserves rule count");
             check(s.book.used("tv.danmaku.bili")==1921000L,"over-install preserves daily usage");
             check(s.book.rules.get("tv.danmaku.bili").lockedUntil==s.prefs.getLong("test_original_until",-1),"over-install preserves precise seven-day lock");
-            check(DeviceInfo.appTitle(c).equals("SevenDays 0.6.5"),"diagnostic title uses installed version");
+            check(DeviceInfo.appTitle(c).equals("SevenDays 0.6.7"),"diagnostic title uses installed version");
             check(ProtectionService.requested(c),"over-install preserves foreground notice opt-in");
             ProtectionService.startFromActivity(a);
         });
